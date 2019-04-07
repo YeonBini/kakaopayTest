@@ -1,4 +1,4 @@
-package com.kakaopay.housing.bank.domain;
+package com.kakaopay.housing.banks.domain;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

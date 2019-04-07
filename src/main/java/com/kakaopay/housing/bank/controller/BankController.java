@@ -1,34 +1,47 @@
 package com.kakaopay.housing.bank.controller;
 
-import com.kakaopay.housing.bank.domain.Banks;
-import com.kakaopay.housing.bank.domain.BanksSaveRequestDto;
-import com.kakaopay.housing.bank.service.BanksService;
+import com.kakaopay.housing.bank.service.BankService;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.json.simple.JSONObject;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @AllArgsConstructor
+@RequestMapping("/bank")
 public class BankController {
 
-    private BanksService banksService;
+    BankService bankService;
 
-    @GetMapping("/banks/hello")
-    public String hello() {
+    @GetMapping("/hello")
+    public String helloworld() {
         return "hello world";
     }
 
-    @PostMapping("/banks/init")
-    public List<Banks> init() {
-        return banksService.saveData();
+
+    @GetMapping("/list")
+    public JSONObject bankList() {
+        return bankService.bankList();
     }
 
-    @PostMapping("/banks/save")
-    public Banks save(@RequestBody BanksSaveRequestDto dto) {
-        return banksService.save(dto);
+    @PostMapping("/init")
+    public JSONObject init() {
+        return bankService.saveData();
     }
+
+    @GetMapping("/info")
+    public JSONObject bankInfo() {
+        return bankService.bankFundsInfo();
+    }
+
+    @GetMapping("/largest")
+    public JSONObject largestFundsBank(@RequestParam String param) {
+        return bankService.largestFundsBank(param);
+    }
+
+    @GetMapping("/foreignBank")
+    public JSONObject foreignBankInfo() {
+        return bankService.foreignBankInfo();
+    }
+
 }

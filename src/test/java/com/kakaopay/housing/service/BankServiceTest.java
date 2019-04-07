@@ -1,8 +1,12 @@
 package com.kakaopay.housing.service;
 
-import com.kakaopay.housing.bank.domain.Banks;
-import com.kakaopay.housing.bank.service.BanksService;
-import org.junit.After;
+import com.google.gson.JsonArray;
+import com.kakaopay.housing.bank.repository.BankRepository;
+import com.kakaopay.housing.bank.service.BankService;
+import com.kakaopay.housing.banks.domain.Banks;
+import com.kakaopay.housing.banks.service.BanksService;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,15 +21,31 @@ import java.util.List;
 public class BankServiceTest {
 
     @Autowired
-    BanksService banksService;
+    BankRepository bankRepository;
+
+    @Autowired
+    BankService bankService;
+
+    @Test
+    public void bankInfoTest() {
+        //given
+        bankService.saveData();
+
+        //when
+        JSONObject jsonObject = bankService.bankFundsInfo();
+
+        //then
+        System.out.println(jsonObject.toJSONString());
+    }
 
     @Test
     public void readCsvTest() {
         // when
-        List<Banks> banksList = banksService.saveData();
+        JSONObject jsonObject = bankService.saveData();
 
+        System.out.println(jsonObject.toJSONString());
         // then
-        Assert.assertTrue(banksList.size() > 0);
+        Assert.assertTrue(jsonObject.get("result") != "Already Executed");
     }
 
 }

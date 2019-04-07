@@ -1,12 +1,10 @@
-package com.kakaopay.housing.bank.repository;
+package com.kakaopay.housing.banks.repository;
 
-import com.kakaopay.housing.bank.domain.Banks;
-import com.kakaopay.housing.bank.domain.BanksListRequestDto;
+import com.kakaopay.housing.banks.domain.Banks;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
-import java.util.Map;
 
 
 public interface BanksRepository extends JpaRepository<Banks, Long> {
@@ -26,5 +24,5 @@ public interface BanksRepository extends JpaRepository<Banks, Long> {
             "FROM Banks b " +
             "GROUP BY b.year " +
             "order by b.year asc")
-    List<Object> findDistinctByYear();
+    List<Object[]> findDistinctByYear();
 }
