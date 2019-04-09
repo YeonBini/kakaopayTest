@@ -1,11 +1,9 @@
 package com.kakaopay.housing.repository;
 
-import com.kakaopay.housing.bank.domain.Bank;
-import com.kakaopay.housing.bank.domain.BankListDto;
-import com.kakaopay.housing.bank.domain.BankTopRankedDto;
-import com.kakaopay.housing.bank.domain.ForeignBankDto;
+import com.kakaopay.housing.bank.domain.*;
 import com.kakaopay.housing.bank.repository.BankRepository;
 import com.kakaopay.housing.bank.service.BankService;
+import com.kakaopay.housing.bank.repository.BankRepositorySupport;
 import org.hamcrest.CoreMatchers;
 import org.junit.After;
 import org.junit.Assert;
@@ -15,9 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.validation.constraints.AssertTrue;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -31,6 +29,9 @@ public class BankRepositoryTest {
 
     @Autowired
     BankService bankService;
+
+    @Autowired
+    BankRepositorySupport bankRepositorySupport;
 
     @After
     public void cleanup() {
@@ -85,10 +86,11 @@ public class BankRepositoryTest {
         bankService.saveData();
 
         //when
-        List<String> bankList = bankRepository.findDistinctByInstituteCode();
+        List<String> bankList = bankRepositorySupport.findBankList();
 
         //then
-        Assert.assertTrue(bankList.get(0).equals("주택도시기금1)(억원)"));
+        System.out.println(Arrays.toString(bankList.toArray()));
+        Assert.assertTrue(bankList.get(0).equals("주택도시기금1"));
     }
 
     @Test
@@ -133,29 +135,28 @@ public class BankRepositoryTest {
 
         //when
         int year = 2005;
-        Map<String, Object> bank = bankRepository.findDistinctTopByYearAndInstituteAndInstituteName(year);
+        Map<Integer, String> bank = bankRepositorySupport.findLargestFundsBankByYear(year);
 
-        BankTopRankedDto topRankedDto = new BankTopRankedDto((int)bank.get("year"),
-                (String)bank.get("instituteName"), ((BigInteger)bank.get("funds")).intValue());
+        for(Integer key : bank.keySet()) {
+            System.out.println(key + " : " + bank.get(key));
+        }
+//        BankTopRankedDto topRankedDto = new BankTopRankedDto((int)bank.get("year"),
+//                (String)bank.get("instituteName"), ((BigInteger)bank.get("funds")).intValue());
         //then
-        Assert.assertTrue(topRankedDto.getInstituteName().equals("주택도시기금1)(억원)"));
-        Assert.assertTrue(topRankedDto.getFunds()==20789);
+//        Assert.assertTrue(topRankedDto.getInstituteName().equals("주택도시기금1)(억원)"));
+//        Assert.assertTrue(topRankedDto.getFunds()==20789);
     }
 
+
+
     @Test
-    public void findByInstituteCodeForeignBankGroupByYear_test() {
+    public void 외환은행_min_max_test() {
         //given
         bankService.saveData();
 
-        //when
-        List<Object[]> list = bankRepository.findByInstituteCodeForeignBankGroupByYear();
-
-        List<ForeignBankDto> foreignBankDtos = list.stream().map(dto -> new ForeignBankDto(
-                (int)dto[0],
-                ((Double)dto[1]).intValue()
-        )).collect(Collectors.toList());
-
-        //then
-        Assert.assertTrue(foreignBankDtos.get(0).getAmount() ==144);
+        Map<Integer, Integer> results = bankRepositorySupport.findForeignBankMinMax();
+        for(int i : results.keySet()) {
+            System.out.println(i+" : " + results.get(i));
+        }
     }
 }

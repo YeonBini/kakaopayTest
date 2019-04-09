@@ -1,10 +1,14 @@
 package com.kakaopay.housing.service;
 
 import com.google.gson.JsonArray;
+import com.kakaopay.housing.bank.domain.Bank;
+import com.kakaopay.housing.bank.domain.QBank;
 import com.kakaopay.housing.bank.repository.BankRepository;
 import com.kakaopay.housing.bank.service.BankService;
 import com.kakaopay.housing.banks.domain.Banks;
 import com.kakaopay.housing.banks.service.BanksService;
+import com.querydsl.core.group.GroupBy;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.junit.Assert;
@@ -15,6 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
+import java.util.Map;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
@@ -47,5 +52,7 @@ public class BankServiceTest {
         // then
         Assert.assertTrue(jsonObject.get("result") != "Already Executed");
     }
+
+
 
 }

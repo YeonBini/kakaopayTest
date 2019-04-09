@@ -19,14 +19,14 @@ public class BankController {
     }
 
 
-    @GetMapping("/list")
-    public JSONObject bankList() {
-        return bankService.bankList();
-    }
-
     @PostMapping("/init")
     public JSONObject init() {
         return bankService.saveData();
+    }
+
+    @GetMapping("/list")
+    public JSONObject bankList() {
+        return bankService.bankList();
     }
 
     @GetMapping("/info")

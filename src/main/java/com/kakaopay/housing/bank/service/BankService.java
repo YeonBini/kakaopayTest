@@ -1,11 +1,10 @@
 package com.kakaopay.housing.bank.service;
 
-import com.kakaopay.housing.bank.domain.Bank;
-import com.kakaopay.housing.bank.domain.BankListDto;
-import com.kakaopay.housing.bank.domain.BankTopRankedDto;
-import com.kakaopay.housing.bank.domain.ForeignBankDto;
+import com.kakaopay.housing.bank.domain.*;
 import com.kakaopay.housing.bank.repository.BankRepository;
+import com.kakaopay.housing.bank.repository.BankRepositorySupport;
 import lombok.AllArgsConstructor;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
@@ -26,7 +25,9 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class BankService {
 
-    BankRepository bankRepository;
+    private BankRepository bankRepository;
+
+    private BankRepositorySupport bankRepositorySupport;
 
     final String [] INSTITUTE_NAME_ARR = {"주택도시기금1","국민은행","우리은행","신한은행",
             "한국시티은행","하나은행","농협은행/수협은행","외환은행","기타은행"};
@@ -47,7 +48,7 @@ public class BankService {
     public JSONObject bankList() {
         JSONObject jsonObject = new JSONObject();
 
-        List<String> bankList = bankRepository.findDistinctByInstituteCode();
+        List<String> bankList = bankRepositorySupport.findBankList();
         jsonObject.put("result", bankList);
 
         return jsonObject;
@@ -67,28 +68,47 @@ public class BankService {
         JSONObject jsonObject = new JSONObject();
         int year = Integer.parseInt(sYear);
 
-        Map<String, Object> bank = bankRepository.findDistinctTopByYearAndInstituteAndInstituteName(year);
+        Map<Integer, String> bank = bankRepositorySupport.findLargestFundsBankByYear(year);
 
-        BankTopRankedDto topRankedDto = new BankTopRankedDto((int)bank.get("year"),
-                (String)bank.get("instituteName"), ((BigInteger)bank.get("funds")).intValue());
-
-        jsonObject.put("year", topRankedDto.getYear());
-        jsonObject.put("bank", topRankedDto.getInstituteName());
+        jsonObject.put("year", year);
+        jsonObject.put("bank", bank.get(year));
         return jsonObject;
     }
 
     public JSONObject foreignBankInfo() {
         JSONObject jsonObject = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+        Map<Integer, Integer> foreignBankMap = bankRepositorySupport.findForeignBankMinMax();
 
-        List<Object[]> list = bankRepository.findByInstituteCodeForeignBankGroupByYear();
+        int maxYear =0, minYear=0;
+        int maxFunds = 0, minFunds = Integer.MAX_VALUE;
+        for(int year : foreignBankMap.keySet()) {
+            int funds = foreignBankMap.get(year);
 
-        List<ForeignBankDto> foreignBankDtos = list.stream().map(dto -> new ForeignBankDto(
-                (int)dto[0],
-                ((Double)dto[1]).intValue()
-        )).collect(Collectors.toList());
+            //최소 금액
+            if(minFunds > funds) {
+                minFunds = funds;
+                minYear = year;
+            }
+            //최대 금액
+            if(maxFunds < funds) {
+                maxFunds = funds;
+                maxYear = year;
+            }
+        }
+
+        // 결과값
+        Map<String, Integer> minResult = new HashMap<>();
+        Map<String, Integer> maxResult = new HashMap<>();
+        minResult.put("year", minYear);
+        minResult.put("amount", minFunds);
+        maxResult.put("year", maxYear);
+        maxResult.put("amount", maxFunds);
+        jsonArray.add(minResult);
+        jsonArray.add(maxResult);
 
         jsonObject.put("bank", "외환은행");
-        jsonObject.put("support_amount", foreignBankDtos);
+        jsonObject.put("support_amount", jsonArray);
         return jsonObject;
     }
 
