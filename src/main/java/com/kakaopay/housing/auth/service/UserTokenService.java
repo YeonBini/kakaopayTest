@@ -12,8 +12,8 @@ public class UserTokenService {
 
     UserTokenRepository userTokenRepository;
 
-    public void saveOrUpdate(UserToken userToken) {
-        userTokenRepository.save(userToken);
+    public UserToken saveOrUpdate(UserToken userToken) {
+        return userTokenRepository.save(userToken);
     }
     
     public String registerUser(String username, String password) {

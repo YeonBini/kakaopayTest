@@ -1,9 +1,7 @@
-package com.kakaopay.housing.repository;
+package com.kakaopay.housing.bank.repository;
 
 import com.kakaopay.housing.bank.domain.*;
-import com.kakaopay.housing.bank.repository.BankRepository;
 import com.kakaopay.housing.bank.service.BankService;
-import com.kakaopay.housing.bank.repository.BankRepositorySupport;
 import org.hamcrest.CoreMatchers;
 import org.junit.After;
 import org.junit.Assert;
@@ -13,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;

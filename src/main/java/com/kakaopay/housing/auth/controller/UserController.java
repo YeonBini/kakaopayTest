@@ -18,7 +18,7 @@ public class UserController {
                 userSignInInfo.getPassword());
     }
 
-    @GetMapping("/singIn")
+    @GetMapping("/signIn")
     public String loginUser(@RequestBody UserSignInInfo userSignInInfo) {
         return userTokenService.getUserTokenByLogin(userSignInInfo.getUsername(),
                 userSignInInfo.getPassword());

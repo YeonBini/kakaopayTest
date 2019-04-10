@@ -68,6 +68,9 @@ querydsl {
     querydslSourcesDir = querydslSrcDir
 }
 
+clean {
+    delete querydslSrcDir
+}
 sourceSets {
     main {
         java {

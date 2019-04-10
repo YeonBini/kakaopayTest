@@ -1,13 +1,10 @@
 package com.kakaopay.housing.bank.repository;
 
 import com.kakaopay.housing.bank.domain.Bank;
-import com.kakaopay.housing.bank.domain.BankTopRankedDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 import java.util.List;
-import java.util.Map;
 
 public interface BankRepository extends JpaRepository<Bank, Long> {
 
@@ -26,15 +23,5 @@ public interface BankRepository extends JpaRepository<Bank, Long> {
             "GROUP BY b.year, b.instituteCode " +
             "ORDER BY b.year")
     List<Object[]> findDistinctByYearAndInstituteCode();
-
-//    @Query(nativeQuery = true, value = "select year as year, " +
-//            "institute_name as instituteName, " +
-//            "SUM(funds) as funds " +
-//            "from bank where year= :year " +
-//            "group by year, institute_name " +
-//            "ORDER by funds desc " +
-//            "limit 1")
-//    Map<String, Object> findDistinctTopByYearAndInstituteAndInstituteName(@Param("year") int year);
-
 
 }

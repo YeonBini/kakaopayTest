@@ -1,5 +1,6 @@
 package com.kakaopay.housing.bank.service;
 
+import com.google.gson.JsonArray;
 import com.kakaopay.housing.bank.domain.*;
 import com.kakaopay.housing.bank.repository.BankRepository;
 import com.kakaopay.housing.bank.repository.BankRepositorySupport;
@@ -77,11 +78,21 @@ public class BankService {
 
     public JSONObject foreignBankInfo() {
         JSONObject jsonObject = new JSONObject();
-        JSONArray jsonArray = new JSONArray();
         Map<Integer, Integer> foreignBankMap = bankRepositorySupport.findForeignBankMinMax();
 
+        JSONArray jsonArray = findMinMax(foreignBankMap);
+        jsonObject.put("bank", "외환은행");
+        jsonObject.put("support_amount", jsonArray);
+        return jsonObject;
+    }
+
+    private JSONArray findMinMax(Map<Integer, Integer> foreignBankMap) {
+        JSONArray jsonArray = new JSONArray();
+
+        // min, max 초기화
         int maxYear =0, minYear=0;
         int maxFunds = 0, minFunds = Integer.MAX_VALUE;
+
         for(int year : foreignBankMap.keySet()) {
             int funds = foreignBankMap.get(year);
 
@@ -104,12 +115,11 @@ public class BankService {
         minResult.put("amount", minFunds);
         maxResult.put("year", maxYear);
         maxResult.put("amount", maxFunds);
+
         jsonArray.add(minResult);
         jsonArray.add(maxResult);
+        return jsonArray;
 
-        jsonObject.put("bank", "외환은행");
-        jsonObject.put("support_amount", jsonArray);
-        return jsonObject;
     }
 
     private List<Map<String, Object>> makeBankInfo() {
