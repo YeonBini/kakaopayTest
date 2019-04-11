@@ -215,3 +215,52 @@ curl -X GET \
     "name": "주택금융 공급현황"
 }
 ```
+#### 2-2-4. 연도 별 각 금융기관 지원금액 중 가장 큰 금액의 기관명 출력
+* Method : GET
+* URL : http://:your_server_url/bank/largest
+* Content-Type : application/json; charset=utf-8
+* header 
+  - Authorization : {{token}}
+* parameter
+  - "year" : {{year}}
+* 예제
+```
+curl -X GET \
+  'http://localhost:8080/bank/largest?year=2005' \
+  -H 'Authorization: eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJjb3VudCI6MSwidXNlcm5hbWUiOiJ5ZW9uYm4ifQ.7V4M9N4JyLqlhcepxceTAUzdQHRmkhw1zJshRmw70Zx0zmRceaKwSubYb7fB1DiF8d6YjKThhzWi6xc2xvGk9A' \
+```
+* response
+```
+{
+    "bank": "주택도시기금1",
+    "year": 2005
+}
+```
+#### 2-2-5. 외환은행의 지원금액 평균중 가장 작은 금액과 큰 금액 출력
+* Method : GET
+* URL : http://:your_server_url/bank/foreignBank
+* Content-Type : application/json; charset=utf-8
+* header 
+  - Authorization : {{token}}
+* 예제
+```
+curl -X GET \
+  http://localhost:8080/bank/foreignBank \
+  -H 'Authorization: eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJjb3VudCI6MSwidXNlcm5hbWUiOiJ5ZW9uYm4ifQ.7V4M9N4JyLqlhcepxceTAUzdQHRmkhw1zJshRmw70Zx0zmRceaKwSubYb7fB1DiF8d6YjKThhzWi6xc2xvGk9A' 
+```
+* response
+```
+{
+    "bank": "외환은행",
+    "support_amount": [
+        {
+            "amount": 941,
+            "year": 2008
+        },
+        {
+            "amount": 20421,
+            "year": 2015
+        }
+    ]
+}
+```
