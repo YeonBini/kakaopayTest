@@ -23,6 +23,7 @@
   - "password" : password
   
 * 예제
+```
   curl -X POST \
   http://localhost:8080/user/signUp \
   -H 'Content-Type: application/json' \
@@ -32,7 +33,6 @@
 	"username" : "yeonbn", 
 	"password" : "1234"
 }'
-  
+```  
   
 
-end
