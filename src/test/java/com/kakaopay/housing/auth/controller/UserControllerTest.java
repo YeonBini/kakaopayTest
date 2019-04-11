@@ -76,7 +76,7 @@ public class UserControllerTest {
 
     @Test
     public void refreshToken() throws Exception {
-        String token = userTokenService.getUserTokenByLogin("yeonbin", "1234");
+        String token = (String) userTokenService.getUserTokenByLogin("yeonbin", "1234").get("result");
 
         MockHttpServletResponse response = mockMvc.perform(put("/user/refreshToken")
                 .header("Authorization", token))

@@ -35,8 +35,8 @@ public class BankController {
     }
 
     @GetMapping("/largest")
-    public JSONObject largestFundsBank(@RequestParam String param) {
-        return bankService.largestFundsBank(param);
+    public JSONObject largestFundsBank(@RequestParam String year) {
+        return bankService.largestFundsBank(year);
     }
 
     @GetMapping("/foreignBank")

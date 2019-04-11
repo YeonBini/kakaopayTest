@@ -59,7 +59,7 @@ public class UserTokenServiceTest {
         // given
         UserToken userToken = userTokenRepository.findByUsername("yeonbin");
         // when
-        String newToken = userTokenService.updateTokenGenCount(userToken.getToken());
+        String newToken = (String)userTokenService.updateTokenGenCount(userToken.getToken()).get("result");
 
         // then
         Assert.assertFalse(userToken.getToken().equals(newToken));
@@ -68,7 +68,7 @@ public class UserTokenServiceTest {
     @Test
     public void getUserTokenByLogin() {
         // when
-        String userToken = userTokenService.getUserTokenByLogin("yeonbin", "1234");
+        String userToken = (String) userTokenService.getUserTokenByLogin("yeonbin", "1234").get("result");
 
         // then
         Assert.assertTrue(userToken.equals(userTokenRepository.findByUsername("yeonbin").getToken()));
@@ -77,7 +77,7 @@ public class UserTokenServiceTest {
     @Test
     public void validateToken() {
         // when
-        String userToken = userTokenService.getUserTokenByLogin("yeonbin", "1234");
+        String userToken = (String)userTokenService.getUserTokenByLogin("yeonbin", "1234").get("result");
 
         // then
         Assert.assertTrue(userTokenService.validateToken(userToken));

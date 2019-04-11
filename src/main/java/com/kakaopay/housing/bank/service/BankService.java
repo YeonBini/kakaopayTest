@@ -200,4 +200,11 @@ public class BankService {
 
         return bankList;
     }
+
+    public JSONObject predicatePrice() {
+        JSONObject jsonObject = new JSONObject();
+
+
+        return jsonObject;
+    }
 }

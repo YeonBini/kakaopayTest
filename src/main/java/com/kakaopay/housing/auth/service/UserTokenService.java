@@ -4,6 +4,7 @@ import com.kakaopay.housing.auth.conf.AuthenticationException;
 import com.kakaopay.housing.auth.domain.UserToken;
 import com.kakaopay.housing.auth.repository.UserTokenRepository;
 import lombok.AllArgsConstructor;
+import org.json.simple.JSONObject;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,18 +17,20 @@ public class UserTokenService {
         return userTokenRepository.save(userToken);
     }
     
-    public String registerUser(String username, String password) {
+    public JSONObject registerUser(String username, String password) {
+        JSONObject jsonObject = new JSONObject();
         if(getUserTokenByUserName(username) != null) {
-            return "Already Registered";
+            jsonObject.put("result", "Already Registered");
         }
 
         UserToken userToken = UserToken.getInstance(username, password);
         saveOrUpdate(userToken);
-
-        return userToken.getToken();
+        jsonObject.put("result", userToken.getToken());
+        return jsonObject;
     }
 
-    public String updateTokenGenCount(String token) {
+    public JSONObject updateTokenGenCount(String token) {
+        JSONObject jsonObject = new JSONObject();
         String username = UserToken.getUserNameByToken(token);
         UserToken userToken = getUserTokenByUserName(username);
 
@@ -35,25 +38,28 @@ public class UserTokenService {
         userToken.setToken(newToken);
         saveOrUpdate(userToken);
 
-        return newToken;
+        jsonObject.put("result", newToken);
+
+        return jsonObject;
     }
 
     private UserToken getUserTokenByUserName(String username) {
         return userTokenRepository.findByUsername(username);
     }
 
-    public String getUserTokenByLogin(String username, String password) {
+    public JSONObject getUserTokenByLogin(String username, String password) {
+        JSONObject jsonObject = new JSONObject();
         UserToken userToken = getUserTokenByUserName(username);
 
         if(userToken == null) {
-            return "No token for " + username;
+            jsonObject.put("result", "No token for " + username);
         }
 
-        if(password.equals(userToken.getPassword())) {
-            return userToken.getToken();
+        if(!password.equals(userToken.getPassword())) {
+            jsonObject.put("result", "invalid password");
         }
-
-        return "invalid password";
+        jsonObject.put("result", userToken.getToken());
+        return jsonObject;
     }
 
     public boolean validateToken(String token) {

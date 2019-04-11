@@ -25,11 +25,14 @@ public class JWTFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         String header = req.getHeader("Authorization");
 
-        if(!userTokenService.validateToken(header)) {
-//            throw new AuthenticationException("Authentication Failed");
-            AuthenticationException errorResponse = new AuthenticationException("Authentication Failed");
+        try {
+            if(!userTokenService.validateToken(header)) {
+                AuthenticationException errorResponse = new AuthenticationException("Authentication Failed");
+                response.getWriter().write(convertObjectToJson(errorResponse));
+            }
+        } catch (Exception e) {
+            AuthenticationException errorResponse = new AuthenticationException("invalid token");
             response.getWriter().write(convertObjectToJson(errorResponse));
-
         }
 
         chain.doFilter(request, response);
