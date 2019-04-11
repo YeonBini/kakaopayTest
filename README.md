@@ -27,8 +27,6 @@
 curl -X POST \
   http://localhost:8080/user/signUp \
   -H 'Content-Type: application/json' \
-  -H 'Postman-Token: cec88ddc-6c75-4e85-8eea-44cda2295612' \
-  -H 'cache-control: no-cache' \
   -d '{
 	"username" : "yeonbn", 
 	"password" : "1234"
@@ -52,8 +50,6 @@ curl -X POST \
 curl -X GET \
   http://localhost:8080/user/signIn \
   -H 'Content-Type: application/json' \
-  -H 'Postman-Token: 27f2249a-08a1-4eb5-9bba-9d004c14031a' \
-  -H 'cache-control: no-cache' \
   -d '{
 	"username" : "yeonbn", 
 	"password" : "1234"
@@ -75,9 +71,7 @@ curl -X GET \
 ```
 curl -X PUT \
   http://localhost:8080/user/refreshToken \
-  -H 'Authorization: eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJjb3VudCI6MiwidXNlcm5hbWUiOiJ5ZW9uYm4ifQ.5jTo4TpPsIcoMM6xLUBAhSewTFTBg9_0LYyQdzarvDOlAVA6cqWEpnZsMOYwPxrkpPiBiWKEtoCDbXVcqbhGOw' \
-  -H 'Postman-Token: 9eb902b0-45a7-4880-9675-f68fd935198b' \
-  -H 'cache-control: no-cache'
+  -H 'Authorization: eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJjb3VudCI6MiwidXNlcm5hbWUiOiJ5ZW9uYm4ifQ.5jTo4TpPsIcoMM6xLUBAhSewTFTBg9_0LYyQdzarvDOlAVA6cqWEpnZsMOYwPxrkpPiBiWKEtoCDbXVcqbhGOw' 
 ```
 * response 
 ```
